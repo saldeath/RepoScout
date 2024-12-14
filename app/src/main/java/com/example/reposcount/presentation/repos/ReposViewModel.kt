@@ -89,10 +89,7 @@ class ReposViewModel @Inject constructor(
                 _uiState.update { uiState.value.copy(isLoadingMore = true) }
                 runCatching { syncNextRepos() }
                     .onSuccess { hideSyncMoreLoading() }
-                    .onFailure {
-                        val x = it
-                        hideSyncMoreLoading()
-                    }
+                    .onFailure { hideSyncMoreLoading() }
 
             }
         }

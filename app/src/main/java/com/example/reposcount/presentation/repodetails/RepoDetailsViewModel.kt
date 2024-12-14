@@ -7,7 +7,6 @@ import androidx.navigation.toRoute
 import com.example.reposcount.domain.repos.GetRepoDetails
 import com.example.reposcount.presentation.repodetails.mapper.RepoDetailsMapper
 import com.example.reposcount.presentation.repodetails.model.RepoDetailsUiModel
-import com.example.reposcount.presentation.repodetails.model.RepoDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
