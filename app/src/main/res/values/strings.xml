@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RepoScount</string>
+    <string name="repo_details_yes">yes</string>
+    <string name="repo_details_no">no</string>
+</resources>
