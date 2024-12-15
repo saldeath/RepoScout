@@ -2,4 +2,6 @@
     <string name="app_name">RepoScount</string>
     <string name="repo_details_yes">yes</string>
     <string name="repo_details_no">no</string>
+    <string name="repos_error_getting_repositories">Error getting repositories!</string>
+    <string name="repos_error_getting_more_repositories">Error getting more repositories!</string>
 </resources>

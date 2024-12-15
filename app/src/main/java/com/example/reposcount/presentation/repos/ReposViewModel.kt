@@ -57,7 +57,10 @@ class ReposViewModel @Inject constructor(
             }
             .onStart { _uiState.update { it.copy(isLoading = true) } }
             .onEach { hideLoading() }
-            .catch { hideLoading() }
+            .catch {
+                hideLoading()
+                _uiState.update { it.copy(errorSyncingRepos = true) }
+            }
             .launchIn(viewModelScope)
     }
 
@@ -84,14 +87,16 @@ class ReposViewModel @Inject constructor(
             viewModelScope.launch(ioDispatcher) {
                 _uiState.update { uiState.value.copy(isLoadingMore = true) }
                 runCatching { syncNextRepos() }
-                    .onSuccess { hideSyncMoreLoading() }
-                    .onFailure { hideSyncMoreLoading() }
-
+                    .onSuccess { _uiState.update { uiState.value.copy(isLoadingMore = false) } }
+                    .onFailure {
+                        _uiState.update {
+                            uiState.value.copy(
+                                isLoadingMore = false,
+                                errorSyncingMoreRepos = true
+                            )
+                        }
+                    }
             }
         }
-    }
-
-    private fun hideSyncMoreLoading() {
-        _uiState.update { uiState.value.copy(isLoadingMore = false) }
     }
 }

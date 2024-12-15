@@ -1,6 +1,6 @@
 package com.example.reposcount.presentation.repos
 
-import androidx.compose.foundation.background
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,11 +28,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.example.reposcount.R
 import com.example.reposcount.presentation.repos.model.RepoUiModel
 import com.example.reposcount.presentation.repos.model.RepoUiState
 
@@ -71,11 +72,30 @@ fun RepositoriesScreen(
     listState: LazyListState,
     onRepoClicked: (id: Int) -> Unit
 ) {
-
     if (uiState.isLoading) {
         Loading()
     } else {
         RepositoryList(listState, uiState, onRepoClicked)
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(uiState.errorSyncingRepos) {
+        if (uiState.errorSyncingRepos) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.repos_error_getting_repositories), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    LaunchedEffect(uiState.errorSyncingMoreRepos) {
+        if (uiState.errorSyncingMoreRepos) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.repos_error_getting_more_repositories),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
 
