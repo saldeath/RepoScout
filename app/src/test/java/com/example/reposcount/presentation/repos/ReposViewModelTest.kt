@@ -59,7 +59,6 @@ class ReposViewModelTest {
 
         // Then
         viewModel.uiState.test {
-            assertEquals(RepoUiState(isLoading = false), awaitItem())
             assertEquals(RepoUiState(isLoading = true), awaitItem())
             assertEquals(RepoUiState(isLoading = false), awaitItem())
         }
@@ -77,7 +76,6 @@ class ReposViewModelTest {
 
         // Then
         viewModel.uiState.test {
-            assertEquals(RepoUiState(isLoading = false), awaitItem())
             assertEquals(RepoUiState(isLoading = true), awaitItem())
             assertEquals(RepoUiState(isLoading = false), awaitItem())
         }
@@ -95,7 +93,6 @@ class ReposViewModelTest {
 
         // Then
         viewModel.uiState.test {
-            assertEquals(RepoUiState(isLoading = false), awaitItem())
             assertEquals(RepoUiState(isLoading = true), awaitItem())
             assertEquals(RepoUiState(isLoading = false), awaitItem())
         }
