@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private const val ITEMS_PER_PAGE = 10
+
 class ReposRepositoryImpl @Inject constructor(
     private val githubService: GithubService,
     private val repositoriesDao: RepositoriesDao,
@@ -35,7 +37,7 @@ class ReposRepositoryImpl @Inject constructor(
                 repositories
             )
         )
-        if (repositories.size < 10) endReached = true
+        if (repositories.size < ITEMS_PER_PAGE) endReached = true
     }
 
     override fun getRepositories(): Flow<List<Repository>> {
@@ -49,7 +51,7 @@ class ReposRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getNextPage(): Int {
-        val itemsPerPage = 10
+        val itemsPerPage = ITEMS_PER_PAGE
         val totalItems = repositoriesDao.getTotalRepositories()
         return (totalItems / itemsPerPage) + 1
     }

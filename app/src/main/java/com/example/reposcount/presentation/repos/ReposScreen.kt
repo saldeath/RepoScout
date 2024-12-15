@@ -91,7 +91,10 @@ private fun RepositoryList(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp)
         ) {
-            items(uiState.repoUiModel) {
+            items(
+                items = uiState.repoUiModel,
+                key = { it.githubId }
+            ) {
                 RepositoryCardItem(it, onRepoClicked)
             }
             if (uiState.isLoadingMore) {
