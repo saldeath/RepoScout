@@ -25,11 +25,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.example.reposcount.presentation.repodetails.model.RepoDetailsUiModel
+import com.example.reposcount.presentation.theme.RepoScountTheme
 
 @Composable
 fun RepoDetailsRoute(
@@ -127,5 +129,26 @@ fun RepoDetailsScreen(state: RepoDetailsUiModel?, onBackClicked: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewReposScreen() {
+    RepoScountTheme {
+        RepoDetailsScreen(
+            state = (
+                    RepoDetailsUiModel(
+                        1,
+                        "Cool app",
+                        "fastApi",
+                        "",
+                        "fast",
+                        "",
+                        "Yes",
+                        "No"
+                    )),
+            onBackClicked = {}
+        )
     }
 }

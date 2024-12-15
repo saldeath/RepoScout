@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +37,7 @@ import coil3.compose.AsyncImage
 import com.example.reposcount.R
 import com.example.reposcount.presentation.repos.model.RepoUiModel
 import com.example.reposcount.presentation.repos.model.RepoUiState
+import com.example.reposcount.presentation.theme.RepoScountTheme
 
 @Composable
 fun RepositoriesRoute(
@@ -178,5 +180,23 @@ fun RepositoryCardItem(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewReposScreen() {
+    RepoScountTheme {
+        RepositoriesScreen(
+            uiState = RepoUiState(
+                repoUiModel = List(10) {
+                    RepoUiModel(it,"Github", "", "Visible", "Private")
+                },
+                isLoading = false,
+                isLoadingMore = false,
+            ),
+            listState = rememberLazyListState(),
+            onRepoClicked = {}
+        )
     }
 }
