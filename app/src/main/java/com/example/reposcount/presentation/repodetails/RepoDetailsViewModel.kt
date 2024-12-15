@@ -32,13 +32,11 @@ class RepoDetailsViewModel @Inject constructor(
     }
 
     private fun getRepoDetails() {
-        val id = savedStateHandle.toRoute<RepoDetails>().githubId
+        val id = savedStateHandle.getStateFlow("githubId", 1).value
         getRepoDetails(id)
             .map { repoDetailsMapper.mapToRepoDetailsUiModel(it) }
             .onEach { repoDetailsModel ->
-                _uiState.update {
-                    repoDetailsModel
-                }
+                _uiState.update { repoDetailsModel }
             }
             .launchIn(viewModelScope)
     }

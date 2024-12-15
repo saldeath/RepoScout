@@ -57,11 +57,7 @@ class ReposViewModel @Inject constructor(
             }
             .onStart { _uiState.update { it.copy(isLoading = true) } }
             .onEach { hideLoading() }
-            .catch {
-                val x = it
-                hideLoading()
-
-            }
+            .catch { hideLoading() }
             .launchIn(viewModelScope)
     }
 

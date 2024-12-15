@@ -21,6 +21,7 @@ androidxRoom = "2.6.1"
 coil = "3.0.4"
 mockk = "1.13.13"
 kotlinxCoroutines = "1.9.0"
+turbine="1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref 
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+app-cash-turbine = {group="app.cash.turbine", name="turbine", version.ref="turbine"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
