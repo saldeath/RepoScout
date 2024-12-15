@@ -14,14 +14,10 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
 
@@ -50,9 +46,11 @@ class ReposRepositoryImplTest {
         reposRepositoryImpl.syncRepositories()
 
         // Then
-        coVerify { githubService.getRepos() }
         verify { repositoryMapper.mapToRepositoryDataModels(repoResponseList) }
-        coVerify { repositoriesDao.deleteAndInsertRepositories(repositoryDataModels) }
+        coVerify {
+            githubService.getRepos()
+            repositoriesDao.deleteAndInsertRepositories(repositoryDataModels)
+        }
     }
 
     @Test
@@ -85,8 +83,10 @@ class ReposRepositoryImplTest {
 
         // Then
         assertEquals(listOf(mappedList), result)
-        verify { repositoriesDao.getRepositories() }
-        verify { repositoryMapper.mapToRepositoryModels(daoList) }
+        verify {
+            repositoriesDao.getRepositories()
+            repositoryMapper.mapToRepositoryModels(daoList)
+        }
     }
 
     @Test
@@ -102,7 +102,58 @@ class ReposRepositoryImplTest {
 
         // Then
         assertEquals(repoModel, result)
-        verify { repositoriesDao.getRepoDetails(any()) }
-        verify { repositoryMapper.mapToRepositoryModel(repoDataModel) }
+        verify {
+            repositoriesDao.getRepoDetails(any())
+            repositoryMapper.mapToRepositoryModel(repoDataModel)
+        }
+    }
+
+    @Test
+    fun `verify sync more repositories`() = runTest {
+        // Given
+        val repoModel = mockk<List<RepositoryDataModel>>()
+        val repoResponseList = listOf(mockk<RepoResponse>())
+        coEvery { githubService.getRepos(any()) } returns repoResponseList
+        every { repositoryMapper.mapToRepositoryDataModels(repoResponseList) } returns repoModel
+        coEvery { repositoriesDao.getTotalRepositories() } returns 10
+        coEvery { repositoriesDao.insertRepositories(any()) } just Runs
+
+        // When
+        reposRepositoryImpl.syncNextRepositories()
+
+        // Then
+        verify { repositoryMapper.mapToRepositoryDataModels(repoResponseList) }
+        coVerify {
+            githubService.getRepos(any())
+            repositoryMapper.mapToRepositoryDataModels(repoResponseList)
+            repositoriesDao.insertRepositories(repoModel)
+            repositoriesDao.getTotalRepositories()
+        }
+
+        reposRepositoryImpl.syncNextRepositories()
+    }
+
+    @Test
+    fun `verify sync more repositories doesn't sync anymore if end is reached`() = runTest {
+        // Given
+        val repoModel = mockk<List<RepositoryDataModel>>()
+        val repoResponseList = listOf(mockk<RepoResponse>())
+        coEvery { githubService.getRepos(any()) } returns repoResponseList
+        every { repositoryMapper.mapToRepositoryDataModels(repoResponseList) } returns repoModel
+        coEvery { repositoriesDao.getTotalRepositories() } returns 10
+        coEvery { repositoriesDao.insertRepositories(any()) } just Runs
+
+        // When
+        reposRepositoryImpl.syncNextRepositories()
+        reposRepositoryImpl.syncNextRepositories()
+
+        // Then
+        verify(exactly = 1) { repositoryMapper.mapToRepositoryDataModels(repoResponseList) }
+        coVerify(exactly = 1) {
+            githubService.getRepos(any())
+            repositoryMapper.mapToRepositoryDataModels(repoResponseList)
+            repositoriesDao.insertRepositories(repoModel)
+            repositoriesDao.getTotalRepositories()
+        }
     }
 }
