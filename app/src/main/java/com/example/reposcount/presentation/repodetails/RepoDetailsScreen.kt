@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,7 +62,7 @@ fun RepoDetailsScreen(state: RepoDetailsUiModel?, onBackClicked: () -> Unit) {
             floatingActionButton = {
                 val context = LocalContext.current
                 FloatingActionButton(
-                    modifier = Modifier,
+                    modifier = Modifier.testTag("cta"),
                     containerColor = MaterialTheme.colorScheme.primary,
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(state.htmlUrl))
